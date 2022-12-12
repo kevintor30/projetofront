@@ -1,0 +1,60 @@
+.cursor{
+    cursor: pointer;
+    color: #fdfdfe
+}
+
+.text-decorator-none{
+    text-decoration: none;
+}
+
+.fundo{
+    background: rgb(19, 18, 18) !important;
+    opacity: 2;
+}
+
+.fundoletras{
+    opacity: 50;
+    text-decoration: none !important;
+    color: rgb(207, 7, 247);
+    font-weight: bold;
+    font-style: oblique;
+}
+.imglogo{
+ width: 200px;
+ 
+}
+.imglink{
+    width: 60px;
+    margin-left: 5px;
+}
+.SOBRE_NOS{
+width: 150px;
+height: 80px;
+}
+.proximo{
+    margin-top: -10px;
+    
+}
+.margim{
+    margin-left: 10px !important;
+}
+.margim2{
+    margin-left: -20px !important;
+}
+.margim3{
+    margin-left: 460px !important;
+    margin-top: 10px;
+}
+.imglogin{
+    width: 80px;
+}
+
+.NOSSA_MISSAO{
+width: 150px;
+height: 80px;
+}
+
+.HOME{
+width: 80px;
+height: 80px;
+}
