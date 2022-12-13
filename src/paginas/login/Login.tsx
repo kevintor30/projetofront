@@ -1,76 +1,97 @@
 import { Button, Grid , TextField, Typography} from '@material-ui/core';
 import { Box } from '@mui/material';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import useLocalStorage from 'react-use-localstorage';
 import UserLogin from '../../models/Userlogin';
 
 import { login } from '../../services/Service';
+import { addToken } from '../../store/tokens/actions';
 import './Login.css';
 
-function Login(){
+function Login() {
     let navigate = useNavigate();
-    const [token, setToken] = useLocalStorage('token');
+    const dispatch = useDispatch();
+    const [token, setToken] = useState('');
     const [userLogin, setUserLogin] = useState<UserLogin>(
         {
             id: 0,
             usuario: '',
             senha: '',
             token: '',
-            foto:''
+            foto: ''
         }
-    )
+        )
 
-    function updateModel(e: ChangeEvent<HTMLInputElement>) {
+        function updatedModel(e: ChangeEvent<HTMLInputElement>) {
 
-        setUserLogin({
-            ...userLogin,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    useEffect(() => {
-        if (token !=='') {
-            navigate('/')
+            setUserLogin({
+                ...userLogin,
+                [e.target.name]: e.target.value
+            })
         }
-    }, [token])
 
-    async function onSubmit(e: ChangeEvent<HTMLFormElement>) {
-        e.preventDefault();
+            useEffect(()=>{
+                if(token != ''){
+                    dispatch(addToken(token));
+                    navigate('/home')
+                }
+            }, [token])
 
-        
-        //  const resposta = await api.post(`/usuarios/logar`, userLogin)
-        //     setToken(resposta.data.token)
-         try {
-            await login(`usuarios/logar`,userLogin,setToken)
-            alert('Usuário logado com sucesso')
-        } catch(error) {
-            alert('Dados do usuário inconsistentes, Erro ao logar!');
+        async function onSubmit(e: ChangeEvent<HTMLFormElement>){
+            e.preventDefault();
+            try{
+                await login(`/auth/logar`, userLogin, setToken)
+                toast.success('Usuário logado com sucesso!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                    progress: undefined,
+                    });
+            }catch(error){
+                toast.error('Dados do usuário inconsistentes. Erro ao logar!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                    progress: undefined,
+                    });
+            }
         }
-    }
 
     return(
         <Grid container direction='row' justifyContent='center' alignItems='center' className='imgb'>
-            <Grid xs={5} className='img' >
-            </Grid>
-          <Grid alignItems='center' xs={6}>
-            <Box padding={20}>
+            
+          <Grid alignItems='center' xs={6} className='grid'>
+            <Box padding={20} >
                 <form onSubmit={onSubmit}>
-                    <Typography><h1>Entre Agora</h1></Typography>
-                    <TextField id='usuario' value={userLogin.usuario} onChange={(e: ChangeEvent<HTMLInputElement>) => updateModel(e)} label='Insira o nome do seu usuário' variant='outlined' name='usuario' margin='normal' fullWidth />
-                    <TextField id='senha' value={userLogin.senha}  onChange={(e: ChangeEvent<HTMLInputElement>) => updateModel(e)} label='Digite a sua senha' variant='outlined' name='senha' margin='normal' type='password' fullWidth />
+                    <Typography><h1>Olá! <br/>Seja bem vindo<br/>Faça seu login</h1></Typography>
+                    <TextField id='usuario' value={userLogin.usuario} onChange={(e: ChangeEvent<HTMLInputElement>) => updatedModel(e)} label='Insira o nome do seu usuário' variant='outlined' name='usuario' margin='normal' fullWidth />
+                    <TextField id='senha' value={userLogin.senha}  onChange={(e: ChangeEvent<HTMLInputElement>) => updatedModel(e)} label='Digite a sua senha' variant='outlined' name='senha' margin='normal' type='password' fullWidth />
                 <Box marginTop={2} textAlign= 'center'>
-               <Button type='submit' variant='contained' color='primary'>
-                SUBMETER
+               <Button type='submit' variant='contained' className='botton txt'>
+                Login
                </Button>
                 </Box>
                 </form>
-                <Box display='flex' justifyContent='center' marginTop={2}>
+                <Box display='flex' justifyContent='center' marginTop={2} >
                     <Box marginRight={1}>
-                        <Typography variant='subtitle1' gutterBottom align='center'>Ainda não tem uma conta?</Typography>
+                        <Typography variant='subtitle1' gutterBottom align='center'>Crie sua conta</Typography>
                     </Box>
-                    <Link to='/cadastro'>
-                    <Typography variant='subtitle1' gutterBottom align='center' style={{fontWeight: 'bold'}}>Cadastre-se!</Typography>
+                    <Link to='/cadastrousuario'>
+                    <Button type='submit' variant='contained' className='botton txt'>
+                Cadastre-se!
+               </Button>
+                    
                 </Link>
                 </Box>
             </Box>
